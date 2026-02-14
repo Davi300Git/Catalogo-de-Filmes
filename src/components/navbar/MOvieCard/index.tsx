@@ -81,21 +81,23 @@ export default function MovieCard(props: Props){
                 <div className="meta">
                     {loadingDetails ? (
                         <p>Carregando...</p>
-                    ) : (
+                    ) : details ? (
                         <>
-                            <h2>{details?.title ?? movie.title}</h2>
+                            <h2>{details.title ?? movie.title}</h2>
 
-                            <p><span className="modal-label">Nota:</span> {details?.vote_average ?? movie.vote_average ?? 'N/A'}</p>
+                            <p><span className="modal-label">Nota:</span> {details.vote_average ?? movie.vote_average ?? 'N/A'}</p>
 
-                            <p><span className="modal-label">Gênero:</span> {details?.genres && details.genres.length > 0 ? details.genres.map((g:any) => g.name).join(', ') : 'Desconhecido'}</p>
+                            <p><span className="modal-label">Gênero:</span> {details.genres && details.genres.length > 0 ? details.genres.map((g:any) => g.name).join(', ') : 'Desconhecido'}</p>
 
-                            <p><span className="modal-label">Diretor:</span> {details?.credits?.crew ? (details.credits.crew.find((c:any) => c.job === 'Director')?.name ?? 'Desconhecido') : 'Desconhecido'}</p>
+                            <p><span className="modal-label">Diretor:</span> {details.credits?.crew ? (details.credits.crew.find((c:any) => (c.job && c.job.toLowerCase() === 'director') || (c.department && c.department.toLowerCase() === 'directing'))?.name ?? 'Desconhecido') : 'Desconhecido'}</p>
 
                             <p className="modal-section-title"><span className="modal-label">Sinopse:</span></p>
-                            <p>{details?.overview ?? movie.overview ?? 'Sem sinopse'}</p>
+                            <p>{details.overview ?? movie.overview ?? 'Sem sinopse'}</p>
 
-                            <p><span className="modal-label">Elenco:</span> {details?.credits?.cast ? details.credits.cast.slice(0,6).map((p:any)=>p.name).join(', ') : 'Desconhecido'}</p>
+                            <p><span className="modal-label">Elenco:</span> {details.credits?.cast && details.credits.cast.length > 0 ? details.credits.cast.slice(0,6).map((p:any)=>p.name).join(', ') : 'Desconhecido'}</p>
                         </>
+                    ) : (
+                        <p>Não foi possível carregar os detalhes do filme.</p>
                     )}
                 </div>
             </div>
