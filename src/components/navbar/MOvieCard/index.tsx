@@ -87,7 +87,7 @@ export default function MovieCard(props: Props){
 
                             <p><span className="modal-label">Nota:</span> {details?.vote_average ?? movie.vote_average ?? 'N/A'}</p>
 
-                            <p><span className="modal-label">Gênero:</span> {details?.genres && details.genres.length > 0 ? details.genres.map((g:any) => g.name).join(', ') : (movie?.genres ? movie.genres.map((g:any)=>g.name).join(', ') : 'Desconhecido')}</p>
+                            <p><span className="modal-label">Gênero:</span> {details?.genres && details.genres.length > 0 ? details.genres.map((g:any) => g.name).join(', ') : 'Desconhecido'}</p>
 
                             <p><span className="modal-label">Diretor:</span> {details?.credits?.crew ? (details.credits.crew.find((c:any) => c.job === 'Director')?.name ?? 'Desconhecido') : 'Desconhecido'}</p>
 
