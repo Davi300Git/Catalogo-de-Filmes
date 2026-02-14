@@ -3,7 +3,8 @@
 import { Movie } from "@/src/type/movie";
 import StarRating from "../../StarRating";
 import Modal from '@/src/components/Modal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
 import './index.scss'
 
 export interface Props{
@@ -12,6 +13,31 @@ export interface Props{
 export default function MovieCard(props: Props){
     const movie = props.movie;
     const [open, setOpen] = useState(false);
+    const [details, setDetails] = useState<any | null>(null);
+    const [loadingDetails, setLoadingDetails] = useState(false);
+
+    useEffect(() => {
+        if (!open) return;
+        if (details) return;
+        const load = async () => {
+            setLoadingDetails(true);
+            try{
+                const res = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}`, {
+                    params: {
+                        api_key: 'fc421b67bf71618322849fa41c574e89',
+                        language: 'pt-BR',
+                        append_to_response: 'credits'
+                    }
+                });
+                setDetails(res.data);
+            }catch(e){
+                console.error('Erro ao buscar detalhes do filme', e);
+            }finally{
+                setLoadingDetails(false);
+            }
+        };
+        load();
+    }, [open, details, movie.id]);
 
     return(
         <>
@@ -53,10 +79,24 @@ export default function MovieCard(props: Props){
             <div className="modal-body">
                 <img src={`https://image.tmdb.org/t/p/w342${movie.poster_path}`} alt={movie.title} />
                 <div className="meta">
-                    <h2>{movie.title}</h2>
-                    <p><strong>Gênero:</strong> {movie.genres && movie.genres.length > 0 ? movie.genres.map(g => g.name).join(', ') : 'Desconhecido'}</p>
-                    <p><strong>Diretor:</strong> {movie.credits && movie.credits.crew ? (movie.credits.crew.find(c => c.job === 'Director')?.name ?? 'Desconhecido') : 'Desconhecido'}</p>
-                    {movie.overview && <p>{movie.overview}</p>}
+                    {loadingDetails ? (
+                        <p>Carregando...</p>
+                    ) : (
+                        <>
+                            <h2 style={{marginBottom: '12px'}}>{details?.title ?? movie.title}</h2>
+
+                            <p style={{margin: '8px 0'}}><span style={{color: '#7c5cff', fontWeight: 600}}>Nota:</span> {details?.vote_average ?? movie.vote_average ?? 'N/A'}</p>
+
+                            <p style={{margin: '8px 0'}}><span style={{color: '#7c5cff', fontWeight: 600}}>Gênero:</span> {details?.genres && details.genres.length > 0 ? details.genres.map((g:any) => g.name).join(', ') : (movie?.genres ? movie.genres.map((g:any)=>g.name).join(', ') : 'Desconhecido')}</p>
+
+                            <p style={{margin: '8px 0'}}><span style={{color: '#7c5cff', fontWeight: 600}}>Diretor:</span> {details?.credits?.crew ? (details.credits.crew.find((c:any) => c.job === 'Director')?.name ?? 'Desconhecido') : 'Desconhecido'}</p>
+
+                            <p style={{margin: '12px 0 8px 0'}}><span style={{color: '#7c5cff', fontWeight: 600}}>Sinopse:</span></p>
+                            <p style={{margin: '0 0 12px 0', lineHeight: '1.5'}}>{details?.overview ?? movie.overview ?? 'Sem sinopse'}</p>
+
+                            <p style={{margin: '8px 0'}}><span style={{color: '#7c5cff', fontWeight: 600}}>Elenco:</span> {details?.credits?.cast ? details.credits.cast.slice(0,6).map((p:any)=>p.name).join(', ') : 'Desconhecido'}</p>
+                        </>
+                    )}
                 </div>
             </div>
         </Modal>
