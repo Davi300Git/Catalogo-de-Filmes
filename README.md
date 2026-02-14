@@ -29,7 +29,7 @@ Uma aplicação web moderna para explorar e descobrir filmes utilizando a API do
 
 1. **Clone o repositório**
 ```bash
-git clone <url-do-repositório>
+git clone https://github.com/Davi300Git/Catalogo-de-Filmes.git
 cd CatalagoFilmes/movies-app
 ```
 
