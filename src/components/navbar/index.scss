@@ -28,3 +28,20 @@
     background: rgba(255,255,255,0.03);
     color: #fff;
 }
+
+.search-input-wrap{
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+}
+
+.search-icon{
+    position: absolute;
+    left: 10px;
+    color: rgba(255,255,255,0.8);
+    pointer-events: none;
+}
+
+.search-input{
+    padding-left: 36px;
+}
