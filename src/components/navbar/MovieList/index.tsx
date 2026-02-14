@@ -13,12 +13,48 @@ export default function MovieList(){
     const [apiPage, setApiPage] = useState<number>(1);
     const [totalPages, setTotalPages] = useState<number | null>(null);
     const [loading, setLoading] = useState(false);
+    const [isSearchMode, setIsSearchMode] = useState(false);
 
     useEffect(() => {
         // initial load
         loadPage(1, false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        // When search changes, reset to page 1 and toggles search mode
+        if (search.trim().length > 0) {
+            setIsSearchMode(true);
+            searchMovies(search, 1);
+        } else {
+            setIsSearchMode(false);
+            loadPage(1, false);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [search]);
+
+    const searchMovies = async (query: string, page: number) => {
+        setLoading(true);
+        try{
+            const res = await axios.get('https://api.themoviedb.org/3/search/movie', {
+                params: {
+                    api_key: 'fc421b67bf71618322849fa41c574e89',
+                    language: 'pt-BR',
+                    query: query,
+                    page
+                }
+            });
+
+            const results: Movie[] = res.data.results || [];
+            setTotalPages(res.data.total_pages ?? null);
+            setMovies(results);
+            setApiPage(page);
+        } catch (err) {
+            console.error('Erro ao buscar filmes:', err);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const loadPage = async (page: number, append = false) => {
         setLoading(true);
@@ -49,12 +85,13 @@ export default function MovieList(){
     const goToPage = (p: number) => {
         if (p < 1) return;
         if (totalPages && p > totalPages) return;
-        loadPage(p, false);
+        
+        if (isSearchMode) {
+            searchMovies(search, p);
+        } else {
+            loadPage(p, false);
+        }
     }
-
-    const filtered = movies.filter((m) =>
-        m.title?.toLowerCase().includes(search.trim().toLowerCase())
-    );
 
     // pagination window (2 before/after)
     const pageWindow = 2;
@@ -64,7 +101,7 @@ export default function MovieList(){
     return(
         <>
         <ul className="movie-list">
-            {filtered.map((movie) => (
+            {movies.map((movie) => (
                 <MovieCard key={movie.id} movie={movie} />
             ))}
         </ul>
