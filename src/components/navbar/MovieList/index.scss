@@ -9,10 +9,11 @@
 .movie-list{
     padding: 24px 3%;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(220px, 220px));
     gap: 20px;
     list-style: none;
     width: 100%;
+    justify-content: start;
 }
 
 .pagination{

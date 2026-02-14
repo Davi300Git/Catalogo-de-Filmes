@@ -22,7 +22,7 @@ export default function Navbar(){
 
     return(
         <nav className="navbar">
-            <h1 className="page-title">Filmes</h1>
+            <h1 className="page-title">Catalogo de Filmes do Davi</h1>
             <div className="search-wrapper">
                 <div className="search-input-wrap">
                     <FaSearch className="search-icon" aria-hidden="true" />

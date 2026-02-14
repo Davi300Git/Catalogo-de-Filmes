@@ -83,18 +83,18 @@ export default function MovieCard(props: Props){
                         <p>Carregando...</p>
                     ) : (
                         <>
-                            <h2 style={{marginBottom: '12px'}}>{details?.title ?? movie.title}</h2>
+                            <h2>{details?.title ?? movie.title}</h2>
 
-                            <p style={{margin: '8px 0'}}><span style={{color: '#7c5cff', fontWeight: 600}}>Nota:</span> {details?.vote_average ?? movie.vote_average ?? 'N/A'}</p>
+                            <p><span className="modal-label">Nota:</span> {details?.vote_average ?? movie.vote_average ?? 'N/A'}</p>
 
-                            <p style={{margin: '8px 0'}}><span style={{color: '#7c5cff', fontWeight: 600}}>Gênero:</span> {details?.genres && details.genres.length > 0 ? details.genres.map((g:any) => g.name).join(', ') : (movie?.genres ? movie.genres.map((g:any)=>g.name).join(', ') : 'Desconhecido')}</p>
+                            <p><span className="modal-label">Gênero:</span> {details?.genres && details.genres.length > 0 ? details.genres.map((g:any) => g.name).join(', ') : (movie?.genres ? movie.genres.map((g:any)=>g.name).join(', ') : 'Desconhecido')}</p>
 
-                            <p style={{margin: '8px 0'}}><span style={{color: '#7c5cff', fontWeight: 600}}>Diretor:</span> {details?.credits?.crew ? (details.credits.crew.find((c:any) => c.job === 'Director')?.name ?? 'Desconhecido') : 'Desconhecido'}</p>
+                            <p><span className="modal-label">Diretor:</span> {details?.credits?.crew ? (details.credits.crew.find((c:any) => c.job === 'Director')?.name ?? 'Desconhecido') : 'Desconhecido'}</p>
 
-                            <p style={{margin: '12px 0 8px 0'}}><span style={{color: '#7c5cff', fontWeight: 600}}>Sinopse:</span></p>
-                            <p style={{margin: '0 0 12px 0', lineHeight: '1.5'}}>{details?.overview ?? movie.overview ?? 'Sem sinopse'}</p>
+                            <p className="modal-section-title"><span className="modal-label">Sinopse:</span></p>
+                            <p>{details?.overview ?? movie.overview ?? 'Sem sinopse'}</p>
 
-                            <p style={{margin: '8px 0'}}><span style={{color: '#7c5cff', fontWeight: 600}}>Elenco:</span> {details?.credits?.cast ? details.credits.cast.slice(0,6).map((p:any)=>p.name).join(', ') : 'Desconhecido'}</p>
+                            <p><span className="modal-label">Elenco:</span> {details?.credits?.cast ? details.credits.cast.slice(0,6).map((p:any)=>p.name).join(', ') : 'Desconhecido'}</p>
                         </>
                     )}
                 </div>
